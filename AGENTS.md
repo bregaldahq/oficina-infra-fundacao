@@ -72,7 +72,9 @@ as migrations num MySQL descartável.
 | A migration passa na primeira vez e quebra na segunda | `ADD COLUMN` sem checar o `information_schema` | `pr.yml` e `bin/ws verify` (`migrations-2x`) |
 | O Terraform recria tudo ou perde o state | A chave do state ou a tag `Repo` foi "corrigida" para o nome novo | `bin/check-contracts.py` (NOME-1). Continuam `oficina-infra-database`, de propósito |
 
-O `.terraform.lock.hcl` é ignorado neste repo: cada `init` resolve os providers de novo.
+O `.terraform.lock.hcl` é versionado: se mudar provider, atualize-o com
+`bin/ws exec fundacao terraform providers lock -platform=linux_amd64 -platform=darwin_arm64
+-platform=darwin_amd64` e commite.
 
 ## Convenções
 
