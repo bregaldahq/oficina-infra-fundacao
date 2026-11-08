@@ -163,5 +163,5 @@ jobs:
 
           curl -sS -X POST https://api.newrelic.com/graphql \
             -H "Api-Key: ${NEW_RELIC_API_KEY}" -H 'Content-Type: application/json' \
-            --data "$(jq -n --arg g "$GUID" --arg v "$GITHUB_SHA" --arg d "oficina-infra-database apply em ${TF_ENV}" \
+            --data "$(jq -n --arg g "$GUID" --arg v "$GITHUB_SHA" --arg d "oficina-infra-fundacao apply em ${TF_ENV}" \
               '{query:"mutation($g:EntityGuid!,$v:String!,$d:String!){changeTrackingCreateDeployment(deployment:{entityGuid:$g,version:$v,user:\"github-actions\",description:$d}){deploymentId}}", variables:{g:$g,v:$v,d:$d}}')"

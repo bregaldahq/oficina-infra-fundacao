@@ -1,4 +1,8 @@
-# oficina-infra-database
+# oficina-infra-fundacao
+
+> Parte do sistema **Oficina Mecânica**. Comece pelo repositório principal, [`oficina-mecanica`](https://github.com/bregaldahq/oficina-mecanica): visão geral, mapa dos repositórios e regras para mudanças entre eles.
+>
+> **`oficina-infra-fundacao`** → [`oficina-infra-cluster`](https://github.com/bregaldahq/oficina-infra-cluster) → [`oficina-gateway-auth`](https://github.com/bregaldahq/oficina-gateway-auth) → [`oficina-api`](https://github.com/bregaldahq/oficina-api)
 
 Infraestrutura de **fundação** da plataforma Oficina Mecânica: rede, banco de dados, segredos e
 migrations SQL versionadas.
@@ -84,9 +88,9 @@ flowchart TB
     VPC --> P
     SM --> P
 
-    P -.->|consumido por| K8S["oficina-infra-k8s"]
-    P -.->|consumido por| LAMBDA["oficina-lambda-auth"]
-    P -.->|consumido por| APP["oficina-mecanica-tech-challenge"]
+    P -.->|consumido por| K8S["oficina-infra-cluster"]
+    P -.->|consumido por| LAMBDA["oficina-gateway-auth"]
+    P -.->|consumido por| APP["oficina-api"]
 ```
 
 ### O padrão do "crachá" (badge SG)
@@ -98,7 +102,7 @@ anexa — os nodes do EKS, as ENIs das Lambdas — passa a alcançar o RDS na po
 O motivo de existir é evitar **dependência circular entre repositórios**: se o SG do banco
 apontasse direto para o SG dos nodes do EKS, este repositório dependeria do repo de k8s, que já
 depende deste para obter a VPC. Com o crachá, a dependência permanece unidirecional:
-`database → k8s → lambda → app`.
+`fundação → cluster → gateway → api`.
 
 ### Por que não há NAT Gateway
 
@@ -277,10 +281,10 @@ Todos os valores vêm de `random_password`. **Nenhum segredo é digitado ou comm
 
 ```mermaid
 flowchart LR
-    A["1 · oficina-infra-database<br/><small>VPC · RDS · segredos · SSM</small>"]
-    B["2 · oficina-infra-k8s<br/><small>EKS · ECR · NLB · ESO</small>"]
-    C["3 · oficina-lambda-auth<br/><small>Lambdas · API Gateway · VPC Link</small>"]
-    D["4 · oficina-mecanica-tech-challenge<br/><small>imagem · manifests · Job de migration</small>"]
+    A["1 · oficina-infra-fundacao<br/><small>VPC · RDS · segredos · SSM</small>"]
+    B["2 · oficina-infra-cluster<br/><small>EKS · ECR · NLB · ESO</small>"]
+    C["3 · oficina-gateway-auth<br/><small>Lambdas · API Gateway · VPC Link</small>"]
+    D["4 · oficina-api<br/><small>imagem · manifests · Job de migration</small>"]
 
     A -->|"vpc_id · subnets<br/>db/client_sg_id<br/>secret_arn"| B
     B -->|"nlb/listener_arn<br/>ecr/repository_url"| C
