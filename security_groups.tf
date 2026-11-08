@@ -6,7 +6,7 @@
 # because the `db` security group references it as an ingress source.
 #
 # Why not just reference the EKS node SG directly? Because the node SG is owned
-# by `oficina-infra-k8s`, which in turn reads the VPC from this stack. Pointing
+# by `oficina-infra-cluster`, which in turn reads the VPC from this stack. Pointing
 # at each other would create a circular dependency between two repositories.
 # The badge SG is created here, published to SSM, and merely *consumed*
 # downstream -- the dependency stays one-way: database -> k8s -> lambda -> app.

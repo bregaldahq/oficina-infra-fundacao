@@ -5,7 +5,7 @@ locals {
     Project     = "oficina-mecanica"
     Environment = var.environment
     ManagedBy   = "terraform"
-    Repo        = "oficina-infra-database"
+    Repo        = "oficina-infra-database" # nome antigo de oficina-infra-fundacao; mantido para o rename nao gerar diff de tags
   }
 
   # Duas AZs distintas sao obrigatorias para o DB subnet group do RDS.
