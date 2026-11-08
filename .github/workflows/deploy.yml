@@ -6,9 +6,6 @@ on:
   # no mesmo gesto. Já aconteceu neste projeto: um merge de correção em `main`
   # provisionou um cluster de produção inteiro sem ninguém pedir. Para aplicar
   # em `main`, dispare este workflow manualmente com a ref `main`.
-    paths-ignore:
-      - "**/*.md"
-      - "docs/**"
   workflow_dispatch:
     inputs:
       environment:
