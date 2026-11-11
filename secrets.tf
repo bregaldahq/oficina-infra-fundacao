@@ -24,6 +24,13 @@ resource "random_password" "webhook_token" {
   special = false
 }
 
+# Fase 4: token de servico para as rotas /internal/* do servico de OS, que nao
+# passam pelo API Gateway (docs/fase-4/CONTRATOS.md, secoes 3 e 4).
+resource "random_password" "internal_token" {
+  length  = 32
+  special = false
+}
+
 # --- oficina/<env>/db -------------------------------------------------------
 resource "aws_secretsmanager_secret" "db" {
   name                    = "oficina/${var.environment}/db"
@@ -63,5 +70,6 @@ resource "aws_secretsmanager_secret_version" "auth" {
     ADMIN_USERNAME = var.admin_username
     ADMIN_PASSWORD = random_password.admin.result
     WEBHOOK_TOKEN  = random_password.webhook_token.result
+    INTERNAL_TOKEN = random_password.internal_token.result
   })
 }
