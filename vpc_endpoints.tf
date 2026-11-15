@@ -34,6 +34,8 @@ resource "aws_vpc_security_group_ingress_rule" "vpc_endpoints_https" {
   description                  = "HTTPS from workloads carrying the db-client SG"
 }
 
+# A descricao do SG acima ("only from db clients") ficou desatualizada de
+# proposito: mudar description recria o SG que o endpoint usa.
 # Fase 4: a Lambda auth-cpf deixa de carregar o db-client (ela nao fala mais com
 # o banco) e passa a ter SG proprio, criado no repo do gateway, que aplica depois
 # deste. Por isso a entrada e pelo CIDR da VPC, e nao por referencia a um SG que
