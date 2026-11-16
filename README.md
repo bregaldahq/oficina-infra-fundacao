@@ -321,6 +321,8 @@ reexecutado.
 | `001_initial_schema.sql` | As 7 tabelas originais. Sem `CREATE DATABASE` e sem `USE`: o database é criado pelo próprio RDS. |
 | `002_fase3_ajustes.sql` | Os 10 ajustes da Fase 3: `status`/`email`/`phone` em `customers`, tabela de histórico de status, índices, `ENUM` dos 7 estados, lock otimista em `parts_inventory`, `UNIQUE` nas tabelas de junção, `SMALLINT UNSIGNED` no ano, `DATETIME(3)`. |
 | `003_seed_demo.sql` | Dados de demonstração. **Só em `hml`** — o runner pula arquivos com sufixo `_demo` quando `APP_ENV=production`. |
+| `004_fase4_saga.sql` | Fase 4: status `AWAITING_PAYMENT` e `CANCELLED`, `budget_id` e `payment_url` na OS, tabelas `sagas`, `outbox` e `inbox` da saga. |
+| `005_fase4_remove_catalogo.sql` | Fase 4: remove `service_catalog`, `parts_inventory`, `service_order_services` e `service_order_parts`, que foram para o banco do Faturamento. Só depois de o OS que não as lê estar em produção. |
 
 Nenhum arquivo usa `DELIMITER`; os statements são separados por `;` no fim da linha. Onde o MySQL
 não aceita `IF NOT EXISTS` (`ADD COLUMN`, `ADD INDEX`, `ADD CONSTRAINT`), o `002` consulta o
