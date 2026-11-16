@@ -34,6 +34,21 @@ resource "aws_vpc_security_group_ingress_rule" "vpc_endpoints_https" {
   description                  = "HTTPS from workloads carrying the db-client SG"
 }
 
+# A descricao do SG acima ("only from db clients") ficou desatualizada de
+# proposito: mudar description recria o SG que o endpoint usa.
+# Fase 4: a Lambda auth-cpf deixa de carregar o db-client (ela nao fala mais com
+# o banco) e passa a ter SG proprio, criado no repo do gateway, que aplica depois
+# deste. Por isso a entrada e pelo CIDR da VPC, e nao por referencia a um SG que
+# ainda nao existe. Quem pode ler cada segredo continua sendo decidido pelo IAM.
+resource "aws_vpc_security_group_ingress_rule" "vpc_endpoints_https_from_vpc" {
+  security_group_id = aws_security_group.vpc_endpoints.id
+  cidr_ipv4         = aws_vpc.main.cidr_block
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  description       = "HTTPS from inside the VPC"
+}
+
 resource "aws_vpc_endpoint" "secretsmanager" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${var.aws_region}.secretsmanager"

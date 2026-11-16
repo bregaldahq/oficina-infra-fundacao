@@ -21,10 +21,14 @@ corrija o código ou altere o documento no mesmo conjunto de PRs.
   final.
 - `secrets.tf`: `random_password` gera `oficina/<env>/db` (`host`, `port`, `dbname`,
   `username`, `password`) e `oficina/<env>/auth` (`JWT_SECRET`, `JWT_EXPIRATION`,
-  `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `WEBHOOK_TOKEN`). Ninguém digita nem commita esses valores.
+  `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `WEBHOOK_TOKEN` e, da Fase 4, `INTERNAL_TOKEN`). Ninguém digita nem commita esses valores.
 - `ssm.tf`: os 10 parâmetros `network/*`, `db/*` e `auth/secret_arn` que os outros repos leem
   (seção 2 do `CONTRATOS.md`).
-- `vpc_endpoints.tf`: interface endpoint do Secrets Manager.
+- `vpc_endpoints.tf`: interface endpoint do Secrets Manager. Aceita 443 do SG `db-client` e, da
+  Fase 4, do CIDR da VPC (a `auth-cpf` passa a ter SG próprio).
+- `messaging.tf` (Fase 4): o tópico SNS `oficina-<env>-mensagens` e o parâmetro
+  `messaging/topic_arn`. Filas e assinaturas ficam no `infra/` de cada serviço
+  (`docs/fase-4/CONTRATOS.md`, §5, no `oficina-api`).
 - `migrations/NNN_<slug>.sql`:
   - `001`: schema inicial;
   - `002`: ajustes da Fase 3;
