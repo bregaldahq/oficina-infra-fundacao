@@ -7,7 +7,7 @@
 Infraestrutura de **fundação** da plataforma Oficina Mecânica: rede, banco de dados, segredos e
 migrations SQL versionadas.
 
-Este é o primeiro dos quatro repositórios a ser aplicado e o último a ser destruído. Ele possui
+Este é o primeiro dos seis repositórios a ser aplicado e o último a ser destruído. Ele possui
 tudo que é **durável**: a VPC, o RDS e os segredos. O cluster EKS, as Lambdas e a aplicação podem
 ser destruídos e recriados quantas vezes for necessário sem que este stack seja tocado — e sem que
 nenhum dado seja perdido.
@@ -38,7 +38,7 @@ Nenhum repositório usa `terraform_remote_state` de outro — ver [Parâmetros p
 | Random Provider | ~> 3.6 | Geração das senhas e do `JWT_SECRET` |
 | Amazon RDS for MySQL | 8.0 (`db.t4g.micro`) | Banco de dados relacional |
 | AWS Secrets Manager | — | Segredos `oficina/<env>/db` e `oficina/<env>/auth` |
-| AWS SSM Parameter Store | — | Contrato entre os quatro repositórios |
+| AWS SSM Parameter Store | — | Contrato entre os seis repositórios |
 | S3 + DynamoDB | — | Backend remoto do state, com lock |
 | GitHub Actions + OIDC | — | CI/CD sem access key estática |
 
@@ -342,6 +342,6 @@ o seed for aplicado.
 - [`docs/MODELO-DE-DADOS.md`](docs/MODELO-DE-DADOS.md) — diagrama ER, máquina de estados,
   dicionário de dados tabela a tabela, relacionamentos e a justificativa formal
   MySQL × PostgreSQL × Aurora × DynamoDB.
-- `docs/fase-3/CONTRATOS.md` (repositório da aplicação) — documento normativo dos quatro repos.
+- `docs/fase-3/CONTRATOS.md` (repositório da aplicação) — documento normativo dos seis repos (a Fase 4 soma `docs/fase-4/CONTRATOS.md`).
 - ADR-009 — este repositório como camada de fundação.
 - ADR-010 — nodes em subnet pública, sem NAT Gateway.

@@ -32,7 +32,9 @@ corrija o código ou altere o documento no mesmo conjunto de PRs.
 - `migrations/NNN_<slug>.sql`:
   - `001`: schema inicial;
   - `002`: ajustes da Fase 3;
-  - `003_seed_demo`: 120 OS de demonstração, só em hml.
+  - `003_seed_demo`: 120 OS de demonstração, só em hml;
+  - `004_fase4_saga`: status `AWAITING_PAYMENT` e `CANCELLED`, `budget_id` e `payment_url` na OS,
+    tabelas `sagas`, `outbox` e `inbox` (o serviço de OS é o orquestrador da saga da Fase 4).
 
   Quem executa é o Job `oficina-migrate` da aplicação, não este repo. O modelo de dados está em
   `docs/MODELO-DE-DADOS.md`.
