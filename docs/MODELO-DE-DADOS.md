@@ -7,9 +7,16 @@ Todo o schema é criado pelas migrations versionadas em [`../migrations/`](../mi
 aplicadas em ordem lexicográfica pelo runner `bin/migrate.php` da aplicação e controladas pela
 tabela `schema_migrations`.
 
+> **Fase 4.** O sistema virou três microsserviços, cada um com o próprio banco (ADR-014, em
+> `docs/fase-4/` do `oficina-api`). Este RDS passa a ser só do serviço de OS. A migration `004`
+> acrescenta `AWAITING_PAYMENT`, `CANCELLED`, `budget_id`, `payment_url` e as tabelas `sagas`,
+> `outbox` e `inbox`; a `005` remove `service_catalog`, `parts_inventory`,
+> `service_order_services` e `service_order_parts`, que foram para o MySQL do Faturamento. As
+> seções abaixo marcadas como *Fase 3* descrevem essas tabelas como eram até a `005`.
+
 ---
 
-## 1. Diagrama entidade-relacionamento
+## 1. Diagrama entidade-relacionamento (Fase 3)
 
 ```mermaid
 erDiagram
@@ -164,7 +171,7 @@ domínio** aplicada no lugar certo.
 `ON DELETE CASCADE` aqui é seguro: um veículo não tem existência independente do dono. Note que a
 FK de `service_orders` para `customers` **não** é cascade — ver 2.5.
 
-### 2.3 `service_catalog`
+### 2.3 `service_catalog` (Fase 3, removida na `005`)
 
 Catálogo de serviços oferecidos, com preço de tabela.
 
@@ -178,7 +185,7 @@ Catálogo de serviços oferecidos, com preço de tabela.
 `base_price` é o preço vigente, não o preço cobrado. O preço efetivamente cobrado é copiado para
 `service_order_services.price_charged` no momento em que o serviço entra na ordem — ver 2.6.
 
-### 2.4 `parts_inventory`
+### 2.4 `parts_inventory` (Fase 3, removida na `005`)
 
 Estoque de peças.
 
@@ -236,7 +243,7 @@ telas de listagem exibem o total de dezenas de ordens ao mesmo tempo; recalcular
 `JOIN` agregados por linha. Como o total só muda quando um item é adicionado ou removido — e isso
 acontece dentro da mesma transação que altera o item —, materializar é seguro e barato.
 
-### 2.6 `service_order_services`
+### 2.6 `service_order_services` (Fase 3, removida na `005`)
 
 Junção N:M entre ordens e o catálogo de serviços, com atributo próprio.
 
@@ -257,7 +264,7 @@ um documento imutável quanto ao valor.
 O `UNIQUE (service_order_id, service_catalog_id)` impede a mesma ordem de listar o mesmo serviço
 duas vezes — o que produziria cobrança duplicada silenciosa.
 
-### 2.7 `service_order_parts`
+### 2.7 `service_order_parts` (Fase 3, removida na `005`)
 
 Junção N:M entre ordens e peças, com quantidade e preço congelado.
 
